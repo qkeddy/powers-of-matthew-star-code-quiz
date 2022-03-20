@@ -2,11 +2,43 @@
  * ! Populate initial HTML screen
  */
 function buildWelcomePage() {
-    // Ask question: Do you want to play? 
-    // 
-    console.log("Welcome page built");
+    // Initialize elements
+    var body = document.body;
+    var h1El = document.createElement("h1");
+    var h2El = document.createElement("h2");
+    var infoEl = document.createElement("div");
+    var buttonEl = document.createElement("button");
 
-    return;
+    // Add text
+    h1El.textContent = "Television Series Challenge";
+    h2El.textContent =
+        "Test your knowledge about the Powers of Matthew Star Television Series";
+    infoEl.textContent =
+        "Try to answer the following questions within the 60 second time limit. Remember that incorrect answers will penalize your score time by ten seconds! Good luck!";
+    buttonEl.textContent = "Start Challenge!"
+
+    // Add to page
+    body.appendChild(h1El);
+    h1El.appendChild(h2El);
+    h2El.appendChild(infoEl);
+    h2El.appendChild(buttonEl);
+
+    // Style elements
+    h1El.setAttribute("style", "margin:auto; width:100%; text-align:center;");
+    h2El.setAttribute(
+        "style",
+        "margin:auto; width:100%; text-align:center; font-size: .75em"
+    );
+    infoEl.setAttribute(
+        "style",
+        "margin:auto; width:100%; text-align:center; font-size: .75em; color: blue; font-style: italic"
+    );
+
+    var takeQuiz = true;
+
+    console.log("Welcome page built");
+    
+    return takeQuiz;
 }
 
 /**
@@ -18,7 +50,7 @@ function buildQuestionPage(questionNumber) {
     var currentQuestion = supplyQuestions(questionNumber);
 
     // Build HTML Here
-    console.log("Question: " + currentQuestion.question())
+    console.log("Question: " + currentQuestion.question());
     console.log("Choices: " + currentQuestion.possibleAnswers());
     console.log("Answer: " + currentQuestion.correctAnswer());
     console.log("Answer ID: " + currentQuestion.correctAnswerId());
@@ -64,11 +96,10 @@ function supplyQuestions(questionNumber) {
             return this.quizQuestions[questionNumber].choices[
                 this.quizQuestions[questionNumber].answer
             ];
-        }
+        },
     };
     return questions;
 }
-
 
 /**
  * ! Timer Logic
@@ -79,10 +110,8 @@ function supplyQuestions(questionNumber) {
  */
 // Refresh HTML to display high scores
 
-
-
 /**
- * ! Main Controller 
+ * ! Main Controller
  */
 
 buildWelcomePage();
