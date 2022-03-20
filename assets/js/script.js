@@ -1,10 +1,13 @@
 /**
  * ! Populate initial HTML screen
  */
+function buildWelcomePage() {
+    // Ask question: Do you want to play? 
+    // 
+    console.log("Welcome page built");
 
-/* Ask question: Do you want to play? 
- True / False
-*/
+    return;
+}
 
 /**
  * ! Populate Questions
@@ -12,7 +15,7 @@
 
 function buildQuestionPage(questionNumber) {
     // Get current question
-    var currentQuestion = supplyQuestion(questionNumber);
+    var currentQuestion = supplyQuestions(questionNumber);
 
     // Build HTML Here
     console.log("Question: " + currentQuestion.question())
@@ -24,7 +27,7 @@ function buildQuestionPage(questionNumber) {
 /**
  * ! Populate Questions
  */
-function supplyQuestion(questionNumber) {
+function supplyQuestions(questionNumber) {
     const questions = {
         quizQuestions: [
             {
@@ -66,7 +69,6 @@ function supplyQuestion(questionNumber) {
     return questions;
 }
 
-// Add an anonymous function to the questions object to display the answer and increment to the next question
 
 /**
  * ! Timer Logic
@@ -83,10 +85,12 @@ function supplyQuestion(questionNumber) {
  * ! Main Controller 
  */
 
-var questions = supplyQuestion();
+buildWelcomePage();
 
-for (let index = 0; index < questions.quizQuestions.length; index++) {
-    const currentQuestion = questions[index];
+var quizQuestions = supplyQuestions().quizQuestions;
+
+for (let index = 0; index < quizQuestions.length; index++) {
+    const currentQuestion = quizQuestions[index];
     // Build Question Page
     buildQuestionPage(index);
 }
