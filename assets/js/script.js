@@ -7,7 +7,7 @@ function buildWelcomePage() {
     var h1El = document.createElement("h1");
     var h2El = document.createElement("h2");
     var infoEl = document.createElement("div");
-    var buttonEl = document.createElement("button");
+    var startQuiz = document.createElement("button");
 
     // Add text
     h1El.textContent = "Television Series Challenge";
@@ -15,30 +15,48 @@ function buildWelcomePage() {
         "Test your knowledge about the Powers of Matthew Star Television Series";
     infoEl.textContent =
         "Try to answer the following questions within the 60 second time limit. Remember that incorrect answers will penalize your score time by ten seconds! Good luck!";
-    buttonEl.textContent = "Start Challenge!"
+    startQuiz.textContent = "Start Challenge!";
 
     // Add to page
     body.appendChild(h1El);
-    h1El.appendChild(h2El);
-    h2El.appendChild(infoEl);
-    h2El.appendChild(buttonEl);
+    body.appendChild(h2El);
+    body.appendChild(infoEl);
+    body.appendChild(startQuiz);
 
     // Style elements
-    h1El.setAttribute("style", "margin:auto; width:100%; text-align:center;");
-    h2El.setAttribute(
-        "style",
-        "margin:auto; width:100%; text-align:center; font-size: .75em"
-    );
-    infoEl.setAttribute(
-        "style",
-        "margin:auto; width:100%; text-align:center; font-size: .75em; color: blue; font-style: italic"
-    );
+    // h1El.setAttribute("style", "margin:auto; width:100%; text-align:center;");
+    // h2El.setAttribute(
+    //     "style",
+    //     "margin:auto; width:100%; text-align:center; font-size: .75em"
+    // );
+    // infoEl.setAttribute(
+    //     "style",
+    //     "margin:auto; width:100%; text-align:center; font-size: .75em; color: blue; font-style: italic"
+    // );
 
-    var takeQuiz = true;
+    // Assign attributes
+    // startQuiz.id = "start-quiz";
+    // var startQuiz = document.querySelector("#start-quiz");
+
+    // Set up event listener to kick off the quiz.
+    startQuiz.addEventListener("click", function (event) {
+        // Override default HTML form behavior 
+        event.preventDefault();
+
+        // Fetch array of questions
+        var quizQuestions = supplyQuestions().quizQuestions;
+
+        // For each question, build the question page
+        for (let index = 0; index < quizQuestions.length; index++) {
+            const currentQuestion = quizQuestions[index];
+            // Build Question Page
+            buildQuestionPage(index);
+        }
+    });
 
     console.log("Welcome page built");
-    
-    return takeQuiz;
+
+    return;
 }
 
 /**
@@ -116,10 +134,3 @@ function supplyQuestions(questionNumber) {
 
 buildWelcomePage();
 
-var quizQuestions = supplyQuestions().quizQuestions;
-
-for (let index = 0; index < quizQuestions.length; index++) {
-    const currentQuestion = quizQuestions[index];
-    // Build Question Page
-    buildQuestionPage(index);
-}
