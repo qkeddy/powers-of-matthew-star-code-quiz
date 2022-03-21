@@ -1,3 +1,8 @@
 /* div {
     font-style: italic;
 } */
+
+/* Test Classes */
+.test-class {
+    color: red;
+}

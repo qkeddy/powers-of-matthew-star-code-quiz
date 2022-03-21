@@ -4,13 +4,11 @@
 function buildWelcomePage() {
     // Initialize elements
     var body = document.body;
-    var h1El = document.createElement("h1");
     var h2El = document.createElement("h2");
     var infoEl = document.createElement("div");
     var startQuizEl = document.createElement("button");
 
     // Add text to elements
-    h1El.textContent = "Television Series Challenge";
     h2El.textContent =
         "Test your knowledge about the Powers of Matthew Star Television Series";
     infoEl.textContent =
@@ -18,7 +16,8 @@ function buildWelcomePage() {
     startQuizEl.textContent = "Start Challenge!";
 
     // Add the elements to the body tag
-    body.append(h1El, h2El, infoEl, startQuizEl);
+    body.append(h2El, infoEl, startQuizEl);
+
     console.log("Welcome page built");
 
     // Set up event listener to kick off the quiz
@@ -26,15 +25,8 @@ function buildWelcomePage() {
         // Override default HTML form behavior
         event.preventDefault();
 
-        // Fetch array of questions
-        var quizQuestions = supplyQuestions().quizQuestions;
-
-        // For each question, build the question page
-        for (let index = 0; index < quizQuestions.length; index++) {
-            const currentQuestion = quizQuestions[index];
-            // Build Question Page
-            buildQuestionPage(index);
-        }
+        // Start Quiz
+        buildQuestionPage();
     });
 }
 
@@ -43,14 +35,19 @@ function buildWelcomePage() {
  */
 
 function buildQuestionPage(questionNumber) {
-    // Get current question
-    var currentQuestion = supplyQuestions(questionNumber);
+    var questionCount = supplyQuestions().quizQuestions.length;
 
-    // Build HTML Here
-    console.log("Question: " + currentQuestion.question());
-    console.log("Choices: " + currentQuestion.possibleAnswers());
-    console.log("Answer: " + currentQuestion.correctAnswer());
-    console.log("Answer ID: " + currentQuestion.correctAnswerId());
+    // For each question, build the question page
+    for (let index = 0; index < questionCount; index++) {
+        // Get current question
+        const currentQuestion = supplyQuestions(index);
+
+        // Build HTML Here
+        console.log("Question: " + currentQuestion.question());
+        console.log("Choices: " + currentQuestion.possibleAnswers());
+        console.log("Answer: " + currentQuestion.correctAnswer());
+        console.log("Answer ID: " + currentQuestion.correctAnswerId());
+    }
 }
 
 /**
@@ -110,5 +107,8 @@ function supplyQuestions(questionNumber) {
 /**
  * ! Main Controller
  */
+function init() {
+    buildWelcomePage();
+}
 
-buildWelcomePage();
+init();
