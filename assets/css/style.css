@@ -1,8 +1,12 @@
-/* div {
-    font-style: italic;
-} */
+header {
+    height: 4.5em;
+    background-color: gray;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-/* Test Classes */
-.test-class {
-    color: red;
+header section {
+    color: whitesmoke;
+    margin: 10px
 }

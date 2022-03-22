@@ -25,6 +25,10 @@ function buildWelcomePage() {
         // Override default HTML form behavior
         event.preventDefault();
 
+        // Remove unnecessary tags
+        infoEl.remove();
+        startQuizEl.remove();
+
         // Start Quiz
         buildQuestionPage();
     });
@@ -35,14 +39,50 @@ function buildWelcomePage() {
  */
 
 function buildQuestionPage(questionNumber) {
+    // Initialize elements
+    var body = document.body;
+    var questionEl = document.createElement("h2");
+
+    // Elements to the body tag
+    body.append(questionEl);
+
+    // Fetch number of questions
     var questionCount = supplyQuestions().quizQuestions.length;
 
     // For each question, build the question page
-    for (let index = 0; index < questionCount; index++) {
+    for (let i = 0; i < questionCount; i++) {
         // Get current question
-        const currentQuestion = supplyQuestions(index);
+        const currentQuestion = supplyQuestions(i);
 
-        // Build HTML Here
+        // Clear multiple choice questions and corresponding event listener; prepare to populate
+        if (quizListEl) {
+            quizListEl.remove();
+        }
+
+        var quizListEl = document.createElement("ol");
+        body.append(quizListEl);
+
+        // Populate the question add to body tag
+        questionEl.textContent = currentQuestion.question();
+
+        // Populate the multiple choice answers
+        const possibleAnswers = currentQuestion.possibleAnswers();
+        for (let i = 0; i < possibleAnswers.length; i++) {
+            const multipleChoiceEl = document.createElement("li");
+            multipleChoiceEl.innerHTML =
+                '<a href="#">' + possibleAnswers[i] + "</a>";
+            quizListEl.appendChild(multipleChoiceEl);
+        }
+
+        // Add an event listener when a multiple choice answer is selected
+        quizListEl.addEventListener("click", function (event) {
+            var element = event.target;
+            if (element.matches("a") === true) {
+                alert("hello");
+            }
+        });
+
+        // Log questions details
         console.log("Question: " + currentQuestion.question());
         console.log("Choices: " + currentQuestion.possibleAnswers());
         console.log("Answer: " + currentQuestion.correctAnswer());
@@ -102,7 +142,6 @@ function supplyQuestions(questionNumber) {
 /**
  * ! High score logic
  */
-// Refresh HTML to display high scores
 
 /**
  * ! Main Controller
