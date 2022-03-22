@@ -97,21 +97,21 @@ function supplyQuestions(questionNumber) {
                 choices: ["4pm", "5pm", "6pm", "7pm"],
                 answer: 3,
             },
-            // {
-            //     question: "what date?",
-            //     choices: ["10th", "11th", "12th", "13th"],
-            //     answer: 3,
-            // },
-            // {
-            //     question: "what second?",
-            //     choices: ["1 sec", "2 sec", "3 sec", "4 sec"],
-            //     answer: 0,
-            // },
-            // {
-            //     question: "what year?",
-            //     choices: ["YR1999", "YR2009", "YR2019", "YR2029"],
-            //     answer: 3,
-            // },
+            {
+                question: "what date?",
+                choices: ["10th", "11th", "12th", "13th"],
+                answer: 3,
+            },
+            {
+                question: "what second?",
+                choices: ["1 sec", "2 sec", "3 sec", "4 sec"],
+                answer: 0,
+            },
+            {
+                question: "what year?",
+                choices: ["YR1999", "YR2009", "YR2019", "YR2029"],
+                answer: 3,
+            },
         ],
         question: function () {
             return this.quizQuestions[questionNumber].question;
@@ -157,6 +157,11 @@ function countDownTimer() {
 /**
  * ! High score logic
  */
+function trackHighScores() {
+    // Update Header
+    h2El.textContent = "High Scores"
+    
+}
 
 /**
  * ! Add an event listener when a multiple choice answer is selected
@@ -205,6 +210,7 @@ answerListEl.addEventListener("click", function (event) {
                 timerEl.textContent = "Seconds to complete: " + secondsLeft;
 
                 // TODO - Enter a high score
+                //trackHighScores();
             }
         }, 2000);
     }
@@ -229,3 +235,4 @@ function init() {
 
 // Kickoff main initialization function
 init();
+
