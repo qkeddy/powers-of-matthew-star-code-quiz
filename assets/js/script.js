@@ -13,7 +13,6 @@ var currentQuestionNum = 0;
 // Create a temporary variable to persist the following variables
 var correctAnswer = 0;
 var secondsLeft = 60;
-var secondsToComplete = 0;
 var timerInterval = null;
 
 /**
@@ -98,21 +97,21 @@ function supplyQuestions(questionNumber) {
                 choices: ["4pm", "5pm", "6pm", "7pm"],
                 answer: 3,
             },
-            {
-                question: "what date?",
-                choices: ["10th", "11th", "12th", "13th"],
-                answer: 3,
-            },
-            {
-                question: "what second?",
-                choices: ["1 sec", "2 sec", "3 sec", "4 sec"],
-                answer: 0,
-            },
-            {
-                question: "what year?",
-                choices: ["YR1999", "YR2009", "YR2019", "YR2029"],
-                answer: 3,
-            },
+            // {
+            //     question: "what date?",
+            //     choices: ["10th", "11th", "12th", "13th"],
+            //     answer: 3,
+            // },
+            // {
+            //     question: "what second?",
+            //     choices: ["1 sec", "2 sec", "3 sec", "4 sec"],
+            //     answer: 0,
+            // },
+            // {
+            //     question: "what year?",
+            //     choices: ["YR1999", "YR2009", "YR2019", "YR2029"],
+            //     answer: 3,
+            // },
         ],
         question: function () {
             return this.quizQuestions[questionNumber].question;
@@ -202,6 +201,7 @@ answerListEl.addEventListener("click", function (event) {
                 // Add two seconds to compensate for answer review 
                 secondsLeft += 2;
 
+                // Update the UI
                 timerEl.textContent = "Seconds to complete: " + secondsLeft;
 
                 // TODO - Enter a high score
