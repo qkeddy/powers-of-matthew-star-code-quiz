@@ -207,7 +207,7 @@ answerListEl.addEventListener("click", function (event) {
                 secondsLeft += 2;
 
                 // Update the UI
-                timerEl.textContent = "Seconds to complete: " + secondsLeft;
+                timerEl.textContent = "Seconds remaining: " + secondsLeft;
 
                 // TODO - Enter a high score
                 //trackHighScores();
