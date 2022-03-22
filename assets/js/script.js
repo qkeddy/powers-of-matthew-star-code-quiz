@@ -2,10 +2,15 @@
 var body = document.body;
 var h2El = document.querySelector("h2");
 var topicEl = document.querySelector("h3");
-var answerListEl = document.querySelector("#answer-list");
+var answerListEl = document.querySelector("ol");
+var subTopicEl = document.querySelector("h4");
 
+// Initialize question counter
 var questionCount = 0;
 var currentQuestionNum = 0;
+
+// Create a temporary variable to persist the correct answer
+var correctAnswer = 0;
 
 /**
  * ! Populate initial HTML screen
@@ -42,7 +47,9 @@ function buildWelcomePage(questionNumber) {
  */
 
 function buildQuestionPage(questionNumber) {
-    // console.log("Question #" + (questionNumber + 1).toString());
+    console.log(
+        "------ Question #" + (questionNumber + 1).toString() + "------ "
+    );
 
     // Get current question
     const currentQuestion = supplyQuestions(questionNumber);
@@ -57,20 +64,25 @@ function buildQuestionPage(questionNumber) {
     const possibleAnswers = currentQuestion.possibleAnswers();
     for (let i = 0; i < possibleAnswers.length; i++) {
         const answerEl = document.createElement("li");
-        answerEl.innerHTML = '<a href="#">' + possibleAnswers[i] + "</a>";
+        answerEl.innerHTML = `<a data-index=${i} href="#"> ${possibleAnswers[i]} </a>`;
         answerListEl.appendChild(answerEl);
     }
 
+    // Set correct answer to global variable
+    correctAnswer = currentQuestion.correctAnswerId();
+
     // Log questions details
-    // console.log("Question: " + currentQuestion.question());
-    // console.log("Choices: " + currentQuestion.possibleAnswers());
-    // console.log("Answer: " + currentQuestion.correctAnswer());
-    // console.log("Answer ID: " + currentQuestion.correctAnswerId());
+    console.log("Question: " + currentQuestion.question());
+    console.log("Choices: " + currentQuestion.possibleAnswers());
+    console.log("Answer: " + currentQuestion.correctAnswer());
+    console.log("Answer ID: " + currentQuestion.correctAnswerId());
 }
 
 /**
  * ! Populate Questions
  */
+// TODO add remaining questions count to the UI
+// TODO add the actual TV Knowledge Quiz questions
 function supplyQuestions(questionNumber) {
     const questions = {
         quizQuestions: [
@@ -122,6 +134,41 @@ function supplyQuestions(questionNumber) {
  */
 
 /**
+ * ! Add an event listener when a multiple choice answer is selected
+ */
+answerListEl.addEventListener("click", function (event) {
+    var element = event.target;
+
+    // Add an event to all the <a tags
+    if (element.matches("a") === true) {
+        if (parseInt(element.dataset.index) === correctAnswer) {
+            console.log("Your answer is correct!!");
+            subTopicEl.textContent = "Correct!";
+        } else {
+            console.log("Wrong answer is wrong!!");
+            subTopicEl.textContent = "Wrong!";
+        }
+
+        // TODO If answer is incorrect flash incorrect and decrement the timer by 10 seconds
+        setTimeout(() => {
+            subTopicEl.textContent = "";
+            if (currentQuestionNum <= questionCount - 1) {
+                // Build the next question and the corresponding set of answers
+                buildQuestionPage(currentQuestionNum);
+
+                // Increment current question number
+                currentQuestionNum++;
+            } else {
+                // Quiz is complete, now reset the page
+                topicEl.textContent = "Quiz is Complete";
+                answerListEl.innerHTML = "";
+                subTopicEl.innerHTML = "";
+            }
+        }, 2000);
+    }
+});
+
+/**
  * ! Main Controller
  */
 function init() {
@@ -138,27 +185,5 @@ function init() {
     currentQuestionNum++;
 }
 
+// Kickoff main initialization function
 init();
-
-// Add an event listener when a multiple choice answer is selected
-answerListEl.addEventListener("click", function (event) {
-    var element = event.target;
-
-    console.log("Current Question Number " + currentQuestionNum);
-    console.log("Question Count " + questionCount);
-
-
-    if (element.matches("a") === true) {
-        if (currentQuestionNum <= questionCount - 1) {
-            // Build the next question and set of answers
-            buildQuestionPage(currentQuestionNum);
-
-            // Increment question count
-            currentQuestionNum++;
-        }
-    }
-
-});
-
-// TODO add a remaining questions
-// TODO add the MS questions
