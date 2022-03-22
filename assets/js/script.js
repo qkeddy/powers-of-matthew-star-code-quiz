@@ -1,5 +1,6 @@
 // Find elements on page
 var body = document.body;
+var timerEl = document.querySelector("#countdown-timer");
 var h2El = document.querySelector("h2");
 var topicEl = document.querySelector("h3");
 var answerListEl = document.querySelector("ol");
@@ -9,8 +10,11 @@ var subTopicEl = document.querySelector("h4");
 var questionCount = 0;
 var currentQuestionNum = 0;
 
-// Create a temporary variable to persist the correct answer
+// Create a temporary variable to persist the following variables
 var correctAnswer = 0;
+var secondsLeft = 60;
+var secondsToComplete = 0;
+var timerInterval = null;
 
 /**
  * ! Populate initial HTML screen
@@ -36,6 +40,9 @@ function buildWelcomePage(questionNumber) {
 
         // Remove start quiz button
         startQuizEl.remove();
+
+        // Start Timer
+        countDownTimer();
 
         // Start Quiz
         buildQuestionPage(questionNumber);
@@ -126,8 +133,27 @@ function supplyQuestions(questionNumber) {
 }
 
 /**
- * ! Timer Logic
+ * ! Countdown Timer
  */
+function countDownTimer() {
+    // Sets interval in variable
+    timerInterval = setInterval(function () {
+        secondsLeft--;
+        timerEl.textContent = secondsLeft + " seconds remaining";
+
+        if (secondsLeft === 0) {
+            // Stops execution of action at set interval
+            clearInterval(timerInterval);
+
+            // Inform the user that the time limit has expired and clear the elements
+            topicEl.textContent =
+                "Sorry. You ran out of town. The quiz is now complete";
+            answerListEl.innerHTML = "";
+            subTopicEl.innerHTML = "";
+        }
+    }, 1000);
+}
+
 
 /**
  * ! High score logic
@@ -142,14 +168,19 @@ answerListEl.addEventListener("click", function (event) {
     // Add an event to all the <a tags
     if (element.matches("a") === true) {
         if (parseInt(element.dataset.index) === correctAnswer) {
+            // Flash that the answer is right
             console.log("Your answer is correct!!");
             subTopicEl.textContent = "Correct!";
         } else {
+            // Flash that the answer is wrong
             console.log("Wrong answer is wrong!!");
             subTopicEl.textContent = "Wrong!";
+
+            // Subtract 10 seconds if the answer is wrong
+            secondsLeft -= 10;
         }
 
-        // TODO If answer is incorrect flash incorrect and decrement the timer by 10 seconds
+        // After 2 seconds remove flashed messages
         setTimeout(() => {
             subTopicEl.textContent = "";
             if (currentQuestionNum <= questionCount - 1) {
@@ -163,6 +194,17 @@ answerListEl.addEventListener("click", function (event) {
                 topicEl.textContent = "Quiz is Complete";
                 answerListEl.innerHTML = "";
                 subTopicEl.innerHTML = "";
+
+                // Stop the timer
+                clearInterval(timerInterval);
+                timerInterval = null;
+
+                // Add two seconds to compensate for answer review 
+                secondsLeft += 2;
+
+                timerEl.textContent = "Seconds to complete: " + secondsLeft;
+
+                // TODO - Enter a high score
             }
         }, 2000);
     }
