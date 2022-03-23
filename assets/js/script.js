@@ -2,6 +2,7 @@
 var body = document.body;
 var timerEl = document.querySelector("#countdown-timer");
 var h2El = document.querySelector("h2");
+var focusEl = document.querySelector("#focus-area");
 var topicEl = document.querySelector("h3");
 var answerListEl = document.querySelector("ol");
 var subTopicEl = document.querySelector("h4");
@@ -12,8 +13,9 @@ var currentQuestionNum = 0;
 
 // Create a temporary variable to persist the following variables
 var correctAnswer = 0;
-var secondsLeft = 60;
+var secondsRemaining = 60;
 var timerInterval = null;
+
 
 /**
  * ! Populate initial HTML screen
@@ -49,7 +51,7 @@ function buildWelcomePage(questionNumber) {
 }
 
 /**
- * ! Populate Questions
+ * ! Build Questions Page
  */
 
 function buildQuestionPage(questionNumber) {
@@ -137,10 +139,10 @@ function supplyQuestions(questionNumber) {
 function countDownTimer() {
     // Sets interval in variable
     timerInterval = setInterval(function () {
-        secondsLeft--;
-        timerEl.textContent = secondsLeft + " seconds remaining";
+        secondsRemaining--;
+        timerEl.textContent = secondsRemaining + " seconds remaining";
 
-        if (secondsLeft === 0) {
+        if (secondsRemaining === 0) {
             // Stops execution of action at set interval
             clearInterval(timerInterval);
 
@@ -153,20 +155,77 @@ function countDownTimer() {
     }, 1000);
 }
 
+/**
+ * ! Input initials
+ */
+function inputInitials() {
+    // Update Header
+    h2El.textContent = "High Scores";
+
+    // Clear unneeded elements
+    focusEl.innerHTML = "";
+
+    // Initialize temporary elements
+    var initialsInputEl = document.createElement("input");
+    var submitEl = document.createElement("button");
+
+    // Add text to elements
+    topicEl.textContent = "Enter Initials:";
+    initialsInputEl.innerHTML = 'type="text" id="initials"';
+    submitEl.textContent = "Submit";
+
+    // Add elements to page
+    focusEl.appendChild(topicEl);
+    focusEl.appendChild(initialsInputEl);
+    focusEl.appendChild(submitEl);
+
+    // Add an event listener for the submit button
+    submitEl.addEventListener("click", () => {
+        if (initialsInputEl.value.trim()) {
+            // Create object to hold the current score and associated initials
+            const currentScore = {
+                secondsRemaining: secondsRemaining,
+                playerInitials: initialsInputEl.value.trim(),
+            };
+
+            // Get existing high scores
+            var existingScores = JSON.parse(
+                localStorage.getItem("tvQuizHighScores")
+            );
+
+            if (!existingScores) {
+                existingScores = [];
+            }
+
+            // Add new scores to existing scores
+            existingScores.push(currentScore);
+
+            // Update local storage with the new existing score array
+            localStorage.setItem(
+                "tvQuizHighScores",
+                JSON.stringify(existingScores)
+            );
+        }
+    });
+}
+
+/**
+ * ! Get existing high scores
+ */
 
 /**
  * ! High score logic
  */
-function trackHighScores() {
-    // Update Header
-    h2El.textContent = "High Scores"
-    
-}
+function trackHighScores() {}
 
 /**
  * ! Add an event listener when a multiple choice answer is selected
  */
 answerListEl.addEventListener("click", function (event) {
+    // Prevent default action
+    event.preventDefault();
+
+    // Create an object of the target element
     var element = event.target;
 
     // Add an event to all the <a tags
@@ -175,7 +234,7 @@ answerListEl.addEventListener("click", function (event) {
             // Flash that the answer is right
             console.log("Your answer is correct!!");
             subTopicEl.textContent = "Correct!";
-            subTopicEl.style.color = "green";            
+            subTopicEl.style.color = "green";
         } else {
             // Flash that the answer is wrong
             console.log("Wrong answer is wrong!!");
@@ -183,7 +242,7 @@ answerListEl.addEventListener("click", function (event) {
             subTopicEl.style.color = "red";
 
             // Subtract 10 seconds if the answer is wrong
-            secondsLeft -= 10;
+            secondsRemaining -= 10;
         }
 
         // After 2 seconds remove flashed messages
@@ -205,11 +264,11 @@ answerListEl.addEventListener("click", function (event) {
                 clearInterval(timerInterval);
                 timerInterval = null;
 
-                // Add two seconds to compensate for answer review 
-                secondsLeft += 2;
+                // Add 2 seconds to compensate for the final answer review
+                secondsRemaining += 2;
 
-                // Update the UI
-                timerEl.textContent = "Seconds remaining: " + secondsLeft;
+                // Update the UI with the total remaining time
+                timerEl.textContent = "Seconds remaining: " + secondsRemaining;
 
                 // TODO - Enter a high score
                 //trackHighScores();
@@ -236,5 +295,5 @@ function init() {
 }
 
 // Kickoff main initialization function
-init();
-
+//init();
+inputInitials();
