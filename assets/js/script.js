@@ -19,6 +19,7 @@ var timerInterval = null;
 /**
  * ! Populate initial HTML screen
  */
+// TODO wire up View High Scores
 function buildWelcomePage(questionNumber) {
     // Initialize temporary button
     var startQuizEl = document.createElement("button");
@@ -232,9 +233,9 @@ function displayHighScores() {
     // Loop over scores and display on page
     for (let i = 0; i < existingScores.length; i++) {
         const scoreEl = document.createElement("li");
-        scoreEl.textContent = existingScores[i].toString();
+        scoreEl.textContent = JSON.stringify(existingScores[i]);
         scoreList.appendChild(scoreEl);
-        console.log(existingScores[i]);
+        console.log(JSON.stringify(existingScores[i]));
     }
 }
 
