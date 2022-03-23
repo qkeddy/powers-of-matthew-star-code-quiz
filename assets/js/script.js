@@ -5,8 +5,9 @@ var timerEl = document.querySelector("#countdown-timer");
 var h2El = document.querySelector("h2");
 var focusEl = document.querySelector("#focus-area");
 var topicEl = document.querySelector("h3");
-var answerListEl = document.querySelector("ol");
+var oListEl = document.querySelector("ol");
 var subTopicEl = document.querySelector("h4");
+var buttonEl = document.querySelector("button");
 
 // Initialize question counter & current question number
 var questionCount = 0;
@@ -14,37 +15,36 @@ var currentQuestionNum = 0;
 
 // Create a temporary variable to persist the following variables
 var correctAnswer = 0;
-var secondsRemaining = 60;
+var secondsRemaining = 0;
 var timerInterval = null;
 
 /**
  * ! Populate initial HTML screen
  */
-// TODO wire up View High Scores
 function buildWelcomePage(questionNumber) {
-    // Initialize temporary button
-    var startQuizEl = document.createElement("button");
-
     // Add text to elements
     topicEl.textContent =
         "Try to answer the following questions within the 60 second time limit. Remember that incorrect answers will penalize your score time by ten seconds! Good luck!";
-    startQuizEl.textContent = "Start Challenge!";
-
-    // Add the elements to the body tag
-    body.append(startQuizEl);
 
     console.log("Welcome page built");
 
     // Set up event listener to kick off the quiz
-    startQuizEl.addEventListener("click", function (event) {
+    buttonEl.addEventListener("click", function (event) {
         // Override default HTML form behavior
         event.preventDefault();
 
-        // Remove start quiz button
-        startQuizEl.remove();
+        // Hide start quiz button
+        buttonEl.style.visibility = "hidden";
+        subTopicEl.innerHTML = "";
 
         // Start Timer
         countDownTimer();
+
+        // Set seconds remaining
+        secondsRemaining = 60;
+
+        // Reset the main topic color
+        topicEl.style.color = "black";
 
         // Start Quiz
         buildQuestionPage(questionNumber);
@@ -55,14 +55,14 @@ function buildWelcomePage(questionNumber) {
         // Override default HTML form behavior
         event.preventDefault();
 
-        // Remove start quiz button
-        startQuizEl.remove();
+        // Hide start quiz button
+        buttonEl.style.visibility = "hidden";
 
         // Stop the timer
         clearInterval(timerInterval);
 
         // Flush answer list & timer
-        answerListEl.innerHTML = "";
+        oListEl.innerHTML = "";
         timerEl.textContent = "";
 
         // Display high scores
@@ -86,14 +86,14 @@ function buildQuestionPage(questionNumber) {
     topicEl.textContent = currentQuestion.question();
 
     // Flush the possible answer ordered list
-    answerListEl.innerHTML = "";
+    oListEl.innerHTML = "";
 
     // Populate the multiple choice answers
     const possibleAnswers = currentQuestion.possibleAnswers();
     for (let i = 0; i < possibleAnswers.length; i++) {
         const answerEl = document.createElement("li");
         answerEl.innerHTML = `<a data-index=${i} href="#"> ${possibleAnswers[i]} </a>`;
-        answerListEl.appendChild(answerEl);
+        oListEl.appendChild(answerEl);
     }
 
     // Set correct answer to global variable
@@ -114,7 +114,7 @@ function supplyQuestions(questionNumber) {
     const questions = {
         quizQuestions: [
             {
-                question: "Complete the sentence: \nThe….of Matthew Star",
+                question: "Complete the sentence: \nThe ________ of Matthew Star",
                 choices: ["Adventures", "Powers", "House", "None of the above"],
                 answer: 1,
             },
@@ -182,9 +182,11 @@ function countDownTimer() {
 
             // Inform the user that the time limit has expired and clear the elements
             topicEl.textContent =
-                "Sorry. You ran out of time. The quiz is now complete";
-            answerListEl.innerHTML = "";
+                "Sorry. You ran out of time. The quiz is now complete.";
+            topicEl.style.color = "red"
+            oListEl.innerHTML = "";
             subTopicEl.innerHTML = "";
+            buttonEl.style.visibility = "visible";
         }
     }, 1000);
 }
@@ -196,15 +198,12 @@ function inputInitials() {
     // Update Header
     h2El.textContent = "High Scores";
 
-    // Clear unneeded elements
-    focusEl.innerHTML = "";
-
     // Initialize temporary elements
     var initialsInputEl = document.createElement("input");
     var submitEl = document.createElement("button");
 
     // Add text to elements
-    topicEl.textContent = "Enter Initials:";
+    topicEl.textContent = "You finished the quiz! Please enter initials to be added to the leader board:";
     initialsInputEl.innerHTML = 'type="text" id="initials"';
     submitEl.textContent = "Submit";
 
@@ -223,10 +222,11 @@ function inputInitials() {
             };
 
             // Get existing high scores
-            var existingScores = JSON.parse(
+            existingScores = JSON.parse(
                 localStorage.getItem("tvQuizHighScores")
             );
 
+            // If the existing scores array is null than initialize as an array
             if (!existingScores) {
                 existingScores = [];
             }
@@ -244,6 +244,9 @@ function inputInitials() {
             initialsInputEl.remove();
             submitEl.remove();
 
+            // Hide start quiz button
+            buttonEl.style.visibility = "visible";
+
             // Display the high score board
             displayHighScores();
         }
@@ -253,29 +256,43 @@ function inputInitials() {
 /**
  * ! Display high scores Board
  */
-// TODO add button to start the quiz again
 function displayHighScores() {
-    // Update page
-    topicEl.textContent = "Top scores in descending order:";
+// Clear out prior scores
+    
 
-    // Fetch current scores and sort items
+    // Fetch current scores and sort items if there are items
     var existingScores = JSON.parse(
-        localStorage.getItem("tvQuizHighScores")
-    ).sort(sortByProperty("secondsRemaining"));
+        localStorage.getItem("tvQuizHighScores"));
+    
+    // Sort the array if it is not empty. Otherwise, notify the player and exit
+    if (existingScores) {
+        existingScores = existingScores.sort(
+            sortByProperty("secondsRemaining")
+        );
 
-    // Create a new ordered list
-    const scoreList = document.createElement("ul");
-    focusEl.appendChild(scoreList);
-
+        // Update page message
+        topicEl.textContent = "Top scores in descending order:";
+        topicEl.style.color = "green";
+    } else {
+        // Update page message
+        topicEl.textContent = "Currently there are no scores stored.";
+        console.log("Currently there are no scores stored.");
+        topicEl.style.color = "red";
+        return;
+    }
+    
     // Loop over scores and display on page
     for (let i = 0; i < existingScores.length; i++) {
         const scoreEl = document.createElement("li");
         const playerInitials = existingScores[i].playerInitials;
         const score = existingScores[i].secondsRemaining;
-        scoreEl.textContent = playerInitials + " - " + score;
-        scoreList.appendChild(scoreEl);
+        scoreEl.textContent = playerInitials.toUpperCase() + " - " + score;
+        oListEl.appendChild(scoreEl);
         console.log(playerInitials + " - " + score);
     }
+
+    subTopicEl.textContent = "Want to play?";
+    buttonEl.style.visibility = "visible";
 }
 
 /**
@@ -294,7 +311,7 @@ function sortByProperty(property) {
 /**
  * ! Add an event listener when a multiple choice answer is selected
  */
-answerListEl.addEventListener("click", function (event) {
+oListEl.addEventListener("click", function (event) {
     // Prevent default action
     event.preventDefault();
 
@@ -328,10 +345,11 @@ answerListEl.addEventListener("click", function (event) {
                 // Increment current question number
                 currentQuestionNum++;
             } else {
-                // Quiz is complete, now reset the page
-                topicEl.textContent = "Quiz is Complete";
-                answerListEl.innerHTML = "";
-                subTopicEl.innerHTML = "";
+                // Quiz is complete, now reset the ordered list
+                oListEl.innerHTML = "";
+
+                // Clear the subtopic text
+                subTopicEl.textContent = "";
 
                 // Stop the timer
                 clearInterval(timerInterval);
