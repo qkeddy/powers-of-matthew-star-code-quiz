@@ -208,7 +208,6 @@ function inputInitials() {
     submitEl.textContent = "Submit";
 
     // Add elements to page
-    focusEl.appendChild(topicEl);
     focusEl.appendChild(initialsInputEl);
     focusEl.appendChild(submitEl);
 
