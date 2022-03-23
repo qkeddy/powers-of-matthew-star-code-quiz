@@ -233,9 +233,11 @@ function displayHighScores() {
     // Loop over scores and display on page
     for (let i = 0; i < existingScores.length; i++) {
         const scoreEl = document.createElement("li");
-        scoreEl.textContent = JSON.stringify(existingScores[i]);
+        const playerInitials = existingScores[i].playerInitials;
+        const score = existingScores[i].secondsRemaining;
+        scoreEl.textContent = playerInitials + " - " + score;
         scoreList.appendChild(scoreEl);
-        console.log(JSON.stringify(existingScores[i]));
+        console.log(playerInitials + " - " + score);
     }
 }
 
