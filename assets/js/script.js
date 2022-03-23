@@ -95,24 +95,39 @@ function supplyQuestions(questionNumber) {
     const questions = {
         quizQuestions: [
             {
-                question: "what time?",
-                choices: ["4pm", "5pm", "6pm", "7pm"],
-                answer: 3,
+                question: "Complete the sentence: \nThe….of Matthew Star",
+                choices: ["Adventures", "Powers", "House", "None of the above"],
+                answer: 1,
             },
             {
-                question: "what date?",
-                choices: ["10th", "11th", "12th", "13th"],
-                answer: 3,
-            },
-            {
-                question: "what second?",
-                choices: ["1 sec", "2 sec", "3 sec", "4 sec"],
+                question: "Matthew Star is…",
+                choices: [
+                    "An alien prince",
+                    "An orphaned peasant boy",
+                    "An aspiring artist",
+                    "A mutant",
+                    "None of the above",
+                ],
                 answer: 0,
             },
             {
-                question: "what year?",
-                choices: ["YR1999", "YR2009", "YR2019", "YR2029"],
-                answer: 3,
+                question: "Matthew Star lived…",
+                choices: [
+                    "In a closet under the stairs",
+                    "On a spaceship",
+                    "With a janitor",
+                ],
+                answer: 2,
+            },
+            {
+                question: "What is Matthew Star’s super power?",
+                choices: [
+                    "He has telekinetic powers",
+                    "He can move through space and time",
+                    "He is an extremely talented singer",
+                    "All of the above",
+                ],
+                answer: 0,
             },
         ],
         question: function () {
@@ -219,6 +234,7 @@ function inputInitials() {
 /**
  * ! Display high scores Board
  */
+// TODO add button to start the quiz again
 function displayHighScores() {
     // Update page
     topicEl.textContent = "Top scores in descending order:";
