@@ -1,5 +1,6 @@
 // Find elements on page
 var body = document.body;
+var scoresEl = document.querySelector("#high-scores");
 var timerEl = document.querySelector("#countdown-timer");
 var h2El = document.querySelector("h2");
 var focusEl = document.querySelector("#focus-area");
@@ -48,6 +49,25 @@ function buildWelcomePage(questionNumber) {
         // Start Quiz
         buildQuestionPage(questionNumber);
     });
+
+    // Set up event listener to display high scores
+    scoresEl.addEventListener("click", function (event) {
+        // Override default HTML form behavior
+        event.preventDefault();
+
+        // Remove start quiz button
+        startQuizEl.remove();
+
+        // Stop the timer
+        clearInterval(timerInterval);
+
+        // Flush answer list & timer
+        answerListEl.innerHTML = "";
+        timerEl.textContent = "";
+
+        // Display high scores
+        displayHighScores();
+    });
 }
 
 /**
@@ -90,7 +110,6 @@ function buildQuestionPage(questionNumber) {
  * ! Populate Questions
  */
 // TODO add remaining questions count to the UI
-// TODO add the actual TV Knowledge Quiz questions
 function supplyQuestions(questionNumber) {
     const questions = {
         quizQuestions: [
