@@ -223,8 +223,10 @@ function displayHighScores() {
     // Update page
     topicEl.textContent = "Top scores in descending order:";
 
-    // Fetch current scores
-    const existingScores = JSON.parse(localStorage.getItem("tvQuizHighScores"));
+    // Fetch current scores and sort items
+    var existingScores = JSON.parse(
+        localStorage.getItem("tvQuizHighScores")
+    ).sort(sortByProperty("secondsRemaining"));
 
     // Create a new ordered list
     const scoreList = document.createElement("ul");
@@ -239,6 +241,19 @@ function displayHighScores() {
         scoreList.appendChild(scoreEl);
         console.log(playerInitials + " - " + score);
     }
+}
+
+/**
+ * ! Generic sort function
+ * Credit to: https://medium.com/@asadise/sorting-a-json-array-according-one-property-in-javascript-18b1d22cd9e9
+ */
+function sortByProperty(property) {
+    return function (a, b) {
+        if (a[property] > b[property]) return -1;
+        else if (a[property] < b[property]) return 1;
+
+        return 0;
+    };
 }
 
 /**
