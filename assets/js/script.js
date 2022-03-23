@@ -6,7 +6,7 @@ var topicEl = document.querySelector("h3");
 var answerListEl = document.querySelector("ol");
 var subTopicEl = document.querySelector("h4");
 
-// Initialize question counter
+// Initialize question counter & current question number
 var questionCount = 0;
 var currentQuestionNum = 0;
 
@@ -146,7 +146,7 @@ function countDownTimer() {
 
             // Inform the user that the time limit has expired and clear the elements
             topicEl.textContent =
-                "Sorry. You ran out of town. The quiz is now complete";
+                "Sorry. You ran out of time. The quiz is now complete";
             answerListEl.innerHTML = "";
             subTopicEl.innerHTML = "";
         }
@@ -175,10 +175,12 @@ answerListEl.addEventListener("click", function (event) {
             // Flash that the answer is right
             console.log("Your answer is correct!!");
             subTopicEl.textContent = "Correct!";
+            subTopicEl.style.color = "green";            
         } else {
             // Flash that the answer is wrong
             console.log("Wrong answer is wrong!!");
             subTopicEl.textContent = "Wrong!";
+            subTopicEl.style.color = "red";
 
             // Subtract 10 seconds if the answer is wrong
             secondsLeft -= 10;
