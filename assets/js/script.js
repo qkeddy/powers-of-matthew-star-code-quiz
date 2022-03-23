@@ -270,8 +270,8 @@ answerListEl.addEventListener("click", function (event) {
                 // Update the UI with the total remaining time
                 timerEl.textContent = "Seconds remaining: " + secondsRemaining;
 
-                // TODO - Enter a high score
-                //trackHighScores();
+                // Enter a high score
+                inputInitials();
             }
         }, 2000);
     }
@@ -295,5 +295,5 @@ function init() {
 }
 
 // Kickoff main initialization function
-//init();
-inputInitials();
+init();
+
