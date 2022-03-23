@@ -16,7 +16,6 @@ var correctAnswer = 0;
 var secondsRemaining = 60;
 var timerInterval = null;
 
-
 /**
  * ! Populate initial HTML screen
  */
@@ -205,18 +204,39 @@ function inputInitials() {
                 "tvQuizHighScores",
                 JSON.stringify(existingScores)
             );
+
+            // Clear unnecessary elements
+            initialsInputEl.remove();
+            submitEl.remove();
+
+            // Display the high score board
+            displayHighScores();
         }
     });
 }
 
 /**
- * ! Get existing high scores
+ * ! Display high scores Board
  */
+function displayHighScores() {
+    // Update page
+    topicEl.textContent = "Top scores in descending order:";
 
-/**
- * ! High score logic
- */
-function trackHighScores() {}
+    // Fetch current scores
+    const existingScores = JSON.parse(localStorage.getItem("tvQuizHighScores"));
+
+    // Create a new ordered list
+    const scoreList = document.createElement("ul");
+    focusEl.appendChild(scoreList);
+
+    // Loop over scores and display on page
+    for (let i = 0; i < existingScores.length; i++) {
+        const scoreEl = document.createElement("li");
+        scoreEl.textContent = existingScores[i].toString();
+        scoreList.appendChild(scoreEl);
+        console.log(existingScores[i]);
+    }
+}
 
 /**
  * ! Add an event listener when a multiple choice answer is selected
@@ -296,4 +316,3 @@ function init() {
 
 // Kickoff main initialization function
 init();
-
