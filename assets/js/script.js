@@ -21,7 +21,7 @@ var timerInterval = null;
 /**
  * ! Populate initial HTML screen
  */
-function buildWelcomePage(questionNumber) {
+function buildWelcomePage() {
     // Add text to elements
     topicEl.textContent =
         "Try to answer the following questions within the 60 second time limit. Remember that incorrect answers will penalize your score time by ten seconds! Good luck!";
@@ -40,14 +40,15 @@ function buildWelcomePage(questionNumber) {
         // Start Timer
         countDownTimer();
 
-        // Set seconds remaining
+        // Set seconds remaining and reset current question number
         secondsRemaining = 60;
+        currentQuestionNum = 0;
 
         // Reset the main topic color
         topicEl.style.color = "black";
 
         // Start Quiz
-        buildQuestionPage(questionNumber);
+        buildQuestionPage(currentQuestionNum);
     });
 
     // Set up event listener to display high scores
@@ -114,7 +115,8 @@ function supplyQuestions(questionNumber) {
     const questions = {
         quizQuestions: [
             {
-                question: "Complete the sentence: \nThe ________ of Matthew Star",
+                question:
+                    "Complete the sentence: \nThe ________ of Matthew Star",
                 choices: ["Adventures", "Powers", "House", "None of the above"],
                 answer: 1,
             },
@@ -183,7 +185,7 @@ function countDownTimer() {
             // Inform the user that the time limit has expired and clear the elements
             topicEl.textContent =
                 "Sorry. You ran out of time. The quiz is now complete.";
-            topicEl.style.color = "red"
+            topicEl.style.color = "red";
             oListEl.innerHTML = "";
             subTopicEl.innerHTML = "";
             buttonEl.style.visibility = "visible";
@@ -203,7 +205,8 @@ function inputInitials() {
     var submitEl = document.createElement("button");
 
     // Add text to elements
-    topicEl.textContent = "You finished the quiz! Please enter initials to be added to the leader board:";
+    topicEl.textContent =
+        "You finished the quiz! Please enter initials to be added to the leader board:";
     initialsInputEl.innerHTML = 'type="text" id="initials"';
     submitEl.textContent = "Submit";
 
@@ -256,13 +259,11 @@ function inputInitials() {
  * ! Display high scores Board
  */
 function displayHighScores() {
-// Clear out prior scores
-    
+    // Clear out prior scores
 
     // Fetch current scores and sort items if there are items
-    var existingScores = JSON.parse(
-        localStorage.getItem("tvQuizHighScores"));
-    
+    var existingScores = JSON.parse(localStorage.getItem("tvQuizHighScores"));
+
     // Sort the array if it is not empty. Otherwise, notify the player and exit
     if (existingScores) {
         existingScores = existingScores.sort(
@@ -279,7 +280,7 @@ function displayHighScores() {
         topicEl.style.color = "red";
         return;
     }
-    
+
     // Loop over scores and display on page
     for (let i = 0; i < existingScores.length; i++) {
         const scoreEl = document.createElement("li");
@@ -290,7 +291,10 @@ function displayHighScores() {
         console.log(playerInitials + " - " + score);
     }
 
-    subTopicEl.textContent = "Want to play?";
+    subTopicEl.innerHTML =
+        "Want to learn more about Matthew Star? See <a href='https://en.wikipedia.org/wiki/The_Powers_of_Matthew_Star'>this<a> wiki article.";
+    subTopicEl.style.color = "black";
+
     buttonEl.style.visibility = "visible";
 }
 
@@ -337,12 +341,13 @@ oListEl.addEventListener("click", function (event) {
         // After 2 seconds remove flashed messages
         setTimeout(() => {
             subTopicEl.textContent = "";
-            if (currentQuestionNum <= questionCount - 1) {
+
+            // Increment current question number
+            currentQuestionNum++;
+
+            if (currentQuestionNum < questionCount) {
                 // Build the next question and the corresponding set of answers
                 buildQuestionPage(currentQuestionNum);
-
-                // Increment current question number
-                currentQuestionNum++;
             } else {
                 // Quiz is complete, now reset the ordered list
                 oListEl.innerHTML = "";
@@ -377,11 +382,8 @@ function init() {
 
     // Build the welcome page if the question count is greater than 0
     if (questionCount > 0) {
-        buildWelcomePage(0);
+        buildWelcomePage();
     }
-
-    // Increment the question count since the first question has loaded
-    currentQuestionNum++;
 }
 
 // Kickoff main initialization function
