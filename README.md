@@ -16,7 +16,7 @@ There are no installation requirements except to open the single `index.html` pa
 
 The following GIF showcases a question being asked and selection of multiple choice answers. 
 
-![alt text](./assets/images/basic-screenshot.png)
+![alt text](./assets/images/powers-of-matthew-star-demo.gif)
 
 
 ## Credits
